@@ -27,4 +27,4 @@ CREATE TABLE `list_items` (
   CONSTRAINT `list_items_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-GRANT ALL PRIVILEGES ON projectdb.* TO 'amit'@'localhost';
+GRANT ALL PRIVILEGES ON project.* TO 'amit'@'localhost';
