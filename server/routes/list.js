@@ -16,9 +16,16 @@ router.post('/', (req, res) => {
   const { text, user_id } = req.body;
   const sql = 'INSERT INTO list_items (text, user_id) VALUES (?, ?)';
   db.query(sql, [text, user_id], (err, result) => {
-    if (err) return res.status(500).json({ error: 'שגיאה בהוספה' });
-    res.json({ message: 'נוסף בהצלחה', id: result.insertId });
-  });
+    if (err) {
+      console.error('Error inserting item:', err);
+      return res.status(500).json({ error: 'שגיאה בהוספה' });
+    }
+      res.json({ message: 'נוסף בהצלחה', id: result.insertId });
+      console.log('Item added with ID:', result.insertId);
+    });
+
+  console.log('Request body:', req.body);
+  console.log('SQL query:', sql);
 });
 
 // עריכה

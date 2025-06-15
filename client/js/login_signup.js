@@ -107,7 +107,8 @@ function validateLoginForm(event) {
         console.log("Login response:", data);
         if (data.message) {
             alert(data.message);
-            window.location.href = '/list.html';
+            window.location.href = '/list';
+            localStorage.setItem('userId', data.userId); // שמירת userId ב-localStorage
         } else if (data.error) {
             alert("Error: " + data.error);
         } else {

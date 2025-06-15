@@ -6,9 +6,11 @@ const userRoutes = require('./routes/users');
 const listRoutes = require('./routes/list');
 const clientPath = path.join(__dirname, '..', 'client');
 const port = 3000
-const cors = require("cors")
 app.use(bodyParser.json());
-app.use(cors())
+const cors = require("cors");
+app.use(cors({ origin: "*" }));
+
+
 app.use('/api/users', userRoutes);
 app.use('/api/list', listRoutes);
 
