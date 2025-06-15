@@ -9,6 +9,8 @@ SetProject.sql
 ## 🚀 Running the Server
 To start the server, run the following command:
 ```bash
-cd ./server 
+cd ./server
+```
+```
 npm run dev
 ```
