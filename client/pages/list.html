@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gym Dashboard</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: white;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .floating-icon {
+      position: fixed;
+      background-size: contain;
+      background-repeat: no-repeat;
+      opacity: 0.07;
+      z-index: 0;
+      animation: floatAnim linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes floatAnim {
+      0% {
+        transform: translateY(0vh) rotate(0deg);
+        opacity: 0.1;
+      }
+      50% {
+        opacity: 0.2;
+      }
+      100% {
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0.05;
+      }
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 60px auto;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+      z-index: 1;
+      position: relative;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 32px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #00ffae;
+    }
+
+    form {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px 0 0 8px;
+      outline: none;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      background: #00ffae;
+      color: black;
+      font-weight: bold;
+      border-radius: 0 8px 8px 0;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #00cc8c;
+    }
+
+    .reset-btn {
+      background: #ff6666;
+      color: white;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .reset-btn:hover {
+      background: #cc0000;
+    }
+
+    .save-btn {
+      background: #66b3ff;
+    }
+
+    .edit-btn {
+      background: #ffaa00;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .button-group .reset-btn {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      background: #1a1a1a;
+      margin: 10px 0;
+      padding: 15px 20px;
+      border-left: 5px solid #00ffae;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 18px;
+    }
+
+    .remove {
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .remove:hover {
+      background: #cc0000;
+    }
+
+    @media (max-width: 600px) {
+      form {
+        flex-direction: column;
+      }
+
+      input[type="text"], button {
+        width: 100%;
+        border-radius: 8px;
+        margin: 5px 0;
+      }
+
+      li {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .remove {
+        margin-top: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Gym Machine Wishlist</h1>
+
+    <form onsubmit="addMachine(event)">
+      <input type="text" id="machineInput" placeholder="Enter gym machine name..." required />
+      <button type="submit">Add</button>
+    </form>
+
+    <div class="button-group">
+      <button class="reset-btn" id="resetBtn">Reset List</button>
+      <button class="reset-btn save-btn" id="saveBtn">Save List</button>
+      <button class="reset-btn edit-btn" id="editBtn">Edit List</button>
+    </div>
+
+    <ul id="machineList"></ul>
+  </div>
+
+  <script>
+    const machineInput = document.getElementById("machineInput");
+    const machineList = document.getElementById("machineList");
+    const resetBtn = document.getElementById("resetBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const editBtn = document.getElementById("editBtn");
+
+    let machines = JSON.parse(localStorage.getItem("gymMachines")) || [];
+
+    function renderMachines() {
+      machineList.innerHTML = "";
+      machines.forEach((machine, index) => {
+        const li = document.createElement("li");
+        li.textContent = machine;
+
+        const removeBtn = document.createElement("button");
+        removeBtn.className = "remove";
+        removeBtn.textContent = "Remove";
+        removeBtn.onclick = () => {
+          machines.splice(index, 1);
+          saveAndRender();
+        };
+
+        li.appendChild(removeBtn);
+        machineList.appendChild(li);
+      });
+    }
+
+    function addMachine(e) {
+      e.preventDefault();
+      const name = machineInput.value.trim();
+      if (name) {
+        machines.push(name);
+        saveAndRender();
+        machineInput.value = "";
+      }
+    }
+
+    function saveAndRender() {
+      localStorage.setItem("gymMachines", JSON.stringify(machines));
+      renderMachines();
+    }
+
+    function saveList() {
+      localStorage.setItem("gymMachines", JSON.stringify(machines));
+      alert("List saved!");
+    }
+
+    function resetList() {
+      if (confirm("Are you sure you want to clear the entire list?")) {
+        machines = [];
+        saveAndRender();
+      }
+    }
+
+    function enableEditing() {
+      machineList.innerHTML = "";
+      machines.forEach((machine, index) => {
+        const li = document.createElement("li");
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.value = machine;
+        input.style.flex = "1";
+        input.style.marginRight = "10px";
+        input.style.padding = "6px";
+        input.style.borderRadius = "6px";
+        input.style.border = "none";
+        input.style.fontSize = "16px";
+
+        const saveBtn = document.createElement("button");
+        saveBtn.textContent = "Save";
+        saveBtn.className = "remove";
+        saveBtn.style.background = "#00ffae";
+        saveBtn.style.color = "#000";
+        saveBtn.onclick = () => {
+          const newName = input.value.trim();
+          if (newName) {
+            machines[index] = newName;
+            saveAndRender();
+          }
+        };
+
+        const cancelBtn = document.createElement("button");
+        cancelBtn.textContent = "Cancel";
+        cancelBtn.className = "remove";
+        cancelBtn.style.background = "#999";
+        cancelBtn.onclick = renderMachines;
+
+        li.appendChild(input);
+        li.appendChild(saveBtn);
+        li.appendChild(cancelBtn);
+        machineList.appendChild(li);
+      });
+    }
+
+    // Attach event listeners explicitly (alternative to inline onclick)
+    resetBtn.addEventListener("click", resetList);
+    saveBtn.addEventListener("click", saveList);
+    editBtn.addEventListener("click", enableEditing);
+
+    renderMachines();
+  </script>
+
+  <script>
+    const gymIcons = [
+      'https://cdn-icons-png.flaticon.com/512/2331/2331943.png',
+      'https://cdn-icons-png.flaticon.com/512/2972/2972549.png',
+      'https://cdn-icons-png.flaticon.com/512/2707/2707561.png',
+      'https://cdn-icons-png.flaticon.com/512/871/871613.png',
+      'https://cdn-icons-png.flaticon.com/512/1041/1041874.png',
+      'https://cdn-icons-png.flaticon.com/512/1041/1041882.png',
+      'https://cdn-icons-png.flaticon.com/512/427/427735.png'
+    ];
+
+    function spawnFloatingIcon() {
+      const icon = document.createElement('div');
+      icon.classList.add('floating-icon');
+      icon.style.left = Math.random() * 100 + 'vw';
+      icon.style.top = '100vh';
+      const size = 40 + Math.random() * 40;
+      icon.style.width = icon.style.height = size + 'px';
+      icon.style.backgroundImage = `url('${gymIcons[Math.floor(Math.random() * gymIcons.length)]}')`;
+      icon.style.animationDuration = (10 + Math.random() * 20) + 's';
+      document.body.appendChild(icon);
+
+      setTimeout(() => {
+        icon.remove();
+      }, 30000);
+    }
+
+    setInterval(spawnFloatingIcon, 2000);
+    for (let i = 0; i < 5; i++) {
+      setTimeout(spawnFloatingIcon, i * 1000);
+    }
+  </script>
+
+</body>
+</html>

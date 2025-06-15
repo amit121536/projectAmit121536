@@ -1,0 +1,131 @@
+/* Import Google Fonts for a professional look */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+/* General Styles */
+body {
+    background-color: #2c2c2c; /* Dark gray background */
+    font-family: 'Poppins', sans-serif;
+    color: #ddd; /* Light gray text for contrast */
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container for Centered Content - Wider on X-Axis */
+.container {
+    width: 90%; /* Increases width dynamically */
+    max-width: 1100px; /* Wider but controlled max width */
+    margin: 50px auto;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.85); /* Darker background for contrast */
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3); /* Red glow effect */
+}
+
+/* Headings */
+h1, h2, h3 {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 30px;
+    letter-spacing: 1px;
+    color: #e63946; /* Strong red title */
+}
+
+h2 {
+    font-size: 22px;
+    font-weight: 400;
+}
+
+h3 {
+    font-size: 20px;
+    font-weight: 400;
+    margin-top: 15px;
+}
+
+/* Image Styling */
+.gym-img {
+    width: 100%;
+    max-width: 900px; /* Image scales with new width */
+    height: auto;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(230, 57, 70, 0.5); /* Red glow around image */
+}
+
+/* Links */
+.gym-link {
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 400;
+    color: #e63946; /* Red link */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.gym-link:hover {
+    color: #ffcc00; /* Turns gold on hover */
+    text-decoration: underline;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    background-color: #e63946; /* Red button */
+    color: white;
+    padding: 12px 25px;
+    font-size: 18px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 3px 8px rgba(230, 57, 70, 0.4);
+}
+
+.btn:hover {
+    background-color: #ffcc00; /* Turns gold on hover */
+    color: black;
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .container {
+        width: 95%; /* Expands slightly on tablets */
+        max-width: 1000px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+
+    .btn {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+}
+.error-message {
+    color: #ff4d4d; /* Bright red for better visibility */
+    font-size: 14px; /* Larger font size */
+    font-weight: 600; /* Bold text for emphasis */
+    text-align: left;
+    margin-top: 5px;
+    padding-left: 5px;
+}

@@ -1,0 +1,79 @@
+<!-- ... כל הקוד שלך עד כאן לא משתנה ... -->
+
+<div class="container">
+  <h1>Gym Machine Wishlist</h1>
+
+  <form onsubmit="addMachine(event)">
+    <input type="text" id="machineInput" placeholder="Enter gym machine name..." required />
+    <button type="submit">Add</button>
+  </form>
+
+  <ul id="machineList"></ul>
+
+  <!-- ✅ כפתור איפוס הרשימה -->
+  <div style="text-align: center; margin-top: 20px;">
+    <button onclick="clearMachineList()" style="
+      background: #ff4d4d;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    ">
+      Clear List
+    </button>
+  </div>
+</div>
+
+<script>
+  const machineInput = document.getElementById("machineInput");
+  const machineList = document.getElementById("machineList");
+
+  let machines = JSON.parse(localStorage.getItem("gymMachines")) || [];
+
+  function renderMachines() {
+    machineList.innerHTML = "";
+    machines.forEach((machine, index) => {
+      const li = document.createElement("li");
+      li.textContent = machine;
+
+      const removeBtn = document.createElement("button");
+      removeBtn.className = "remove";
+      removeBtn.textContent = "Remove";
+      removeBtn.onclick = () => {
+        machines.splice(index, 1);
+        saveAndRender();
+      };
+
+      li.appendChild(removeBtn);
+      machineList.appendChild(li);
+    });
+  }
+
+  function addMachine(e) {
+    e.preventDefault();
+    const name = machineInput.value.trim();
+    if (name) {
+      machines.push(name);
+      saveAndRender();
+      machineInput.value = "";
+    }
+  }
+
+  function saveAndRender() {
+    localStorage.setItem("gymMachines", JSON.stringify(machines));
+    renderMachines();
+  }
+
+  // ✅ פונקציה לאיפוס הרשימה
+  function clearMachineList() {
+    if (confirm("Are you sure you want to clear the entire list?")) {
+      machines = [];
+      saveAndRender();
+    }
+  }
+
+  renderMachines();
+</script>
